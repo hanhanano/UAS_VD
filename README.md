@@ -1,9 +1,10 @@
 # Jakarta Dilepas, Bodetabek Dihuni
+
 **UAS Visualisasi Data**
 
-Kelas: 3SD1
-
-Nama: Raihan Taufiqurrahman Zaki
+Raihan Taufiqurrahman Zaki
+3SD1
+222313332
 ---
 
 ## Deskripsi
