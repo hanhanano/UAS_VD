@@ -175,7 +175,7 @@ function switchStageGraphic(viewName, skipTransition = false, afterRender = null
 function getViewMeta(viewName) {
   const meta = {
     chord: {
-      title: 'Diagram Aliran Migrasi Risen (Chord Diagram)',
+      title: 'Diagram Aliran Migrasi Risen',
       subtitle: 'Arah perpindahan penduduk antar provinsi',
     },
     ranking: {
@@ -183,7 +183,7 @@ function getViewMeta(viewName) {
       subtitle: '797.468 migran risen keluar dari DKI',
     },
     od_matrix: {
-      title: '⠀ ⠀ ⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ Matriks Asal-Tujuan',
+      title: 'Matriks Asal-Tujuan',
       subtitle: 'Heatmap provinsi',
     },
     linked: {

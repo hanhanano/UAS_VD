@@ -10,8 +10,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,400;1,600&family=Yellowtail&display=swap"
     rel="stylesheet">
-  <script type="module" crossorigin src="/UAS_VD/assets/index-mbYmoHEq.js"></script>
-  <link rel="stylesheet" crossorigin href="/UAS_VD/assets/index-Czjr0gAQ.css">
+  <script type="module" crossorigin src="/UAS_VD/assets/index-ciqxhK6p.js"></script>
+  <link rel="stylesheet" crossorigin href="/UAS_VD/assets/index-LUedPPmN.css">
 </head>
 
 <body class="bg-[#3a0e22] text-[#f1e5ed] selection:bg-amber-400 selection:text-slate-950 font-medium">
@@ -380,20 +380,20 @@
               <div class="flex items-center justify-between gap-2 border-b border-[#5a1b38] pb-3 mb-3">
                 <div class="flex flex-wrap items-center gap-1.5 overflow-x-auto py-0.5">
                   <button class="tab-btn" data-view="chord">Chord</button>
-                  <button class="tab-btn" data-view="ranking">Ranking DKI</button>
-                  <button class="tab-btn" data-view="od_matrix">Matriks OD</button>
-                  <button class="tab-btn" data-view="linked">PCA + Paralel</button>
-                  <button class="tab-btn" data-view="pca">PCA Biplot</button>
-                  <button class="tab-btn" data-view="parallel">Parallel Coords</button>
+                  <button class="tab-btn" data-view="ranking">Ranking</button>
+                  <button class="tab-btn" data-view="od_matrix">ODMatrix</button>
+                  <button class="tab-btn" data-view="linked">Linked PCA</button>
+                  <button class="tab-btn" data-view="pca">PCA</button>
+                  <button class="tab-btn" data-view="parallel">Parallel</button>
                   <button class="tab-btn" data-view="heatmap">Heatmap</button>
-                  <button class="tab-btn" data-view="map">Peta & Komuter</button>
-                  <button class="tab-btn" data-view="network">Graf Jaringan</button>
+                  <button class="tab-btn" data-view="map">Peta</button>
+                  <button class="tab-btn" data-view="network">Graf</button>
                 </div>
               </div>
 
 
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
+              <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                <div class="sm:col-span-3">
                   <h4 id="stage-graphic-title" class="text-base sm:text-lg font-bold text-white tracking-tight">
                     Diagram Aliran Migrasi Risen
                   </h4>
@@ -403,7 +403,7 @@
                 </div>
 
                 <!-- Kontrol aliran: ambang volume + filter asal/tujuan -->
-                <div id="stage-slider-container" class="flex flex-wrap items-center gap-x-3 gap-y-1.5 transition-opacity duration-200">
+                <div id="stage-slider-container" class="flex flex-wrap items-center gap-x-3 gap-y-1.5 transition-opacity duration-200 sm:col-span-2">
                   <div class="flex items-center gap-1.5 text-xs text-[#d8b4c8]">
                     <label for="flow-origin-select" class="text-[10px] uppercase font-bold text-[#c9a0b5]">Asal:</label>
                     <select id="flow-origin-select"

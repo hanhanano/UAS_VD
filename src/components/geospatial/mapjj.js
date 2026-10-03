@@ -14,7 +14,7 @@ export function renderGeoMap(containerId, geoBoundary, geoData, commuterData) {
 
   mapWrapper.className =
     'w-full flex flex-col gap-2 ' +
-    'h-full min-h-[450px]';
+    'h-full min-h-[500px]';
 
   // Controls bar
   const controlBar = document.createElement('div');
@@ -208,7 +208,7 @@ export function renderGeoMap(containerId, geoBoundary, geoData, commuterData) {
   let legendEl = null;
   let choroOpacity = 0.78;
   let choroVisible = true;
-  let legendCollapsed = window.innerWidth < 768; 
+
   // Jabodetabek Centroids lookup
   const centroids = {
     '3171': [-6.2615, 106.8106], // Jaksel
@@ -474,18 +474,21 @@ export function renderGeoMap(containerId, geoBoundary, geoData, commuterData) {
 
     const choroHtml = choroVisible ? `
       <div style="font-weight:800;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#fbbf24;margin-bottom:4px">${cfg.label}</div>
+      <div style="font-size:10px;color:#c9a0b5;margin-bottom:3px">Kuantil, ${N_CLASSES} kelas (±${Math.round(cs.n / N_CLASSES)} kab/kota per kelas)</div>
       ${rows}
       <div style="display:flex;align-items:center;gap:8px;margin:2px 0">
         <span style="width:22px;height:12px;background:#3a1a2b;border:1px solid rgba(255,255,255,.35);border-radius:2px;flex:none"></span>
         <span style="color:#c9a0b5">Tidak ada data</span>
       </div>` : '';
 
-    const bodyHtml = `
+    legendEl.style.display = (choroVisible || symbolsOn) ? '' : 'none';
+    legendEl.innerHTML = `
       ${choroHtml}
       ${symbolsOn ? `
         <div style="margin-top:8px;padding-top:6px;border-top:1px solid #5a1b38">
           <div style="font-weight:800;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#fb7185;margin-bottom:4px">Jumlah penduduk</div>
           <div style="display:flex;align-items:flex-end;gap:12px">${symbolSamples}</div>
+          <div style="font-size:10px;color:#c9a0b5;margin-top:3px">Luas lingkaran sebanding jumlah penduduk</div>
         </div>` : ''}
       ${choroVisible ? `<details style="margin-top:8px;padding-top:6px;border-top:1px solid #5a1b38">
         <summary style="cursor:pointer;font-size:10px;font-weight:700;color:#d8b4c8">Mengapa kuantil?</summary>
@@ -497,26 +500,6 @@ export function renderGeoMap(containerId, geoBoundary, geoData, commuterData) {
         </div>
       </details>` : ''}
     `;
-
-    legendEl.style.display = (choroVisible || symbolsOn) ? '' : 'none';
-    legendEl.innerHTML = `
-      <div id="legend-toggle-header"
-        style="display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;${legendCollapsed ? '' : 'margin-bottom:6px;'}">
-        <span style="font-weight:800;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#fbbf24">Legenda</span>
-        <span style="font-size:11px;color:#d8b4c8">${legendCollapsed ? '▸' : '▾'}</span>
-      </div>
-      <div id="legend-body" style="${legendCollapsed ? 'display:none;' : ''}">
-        ${bodyHtml}
-      </div>
-    `;
-
-    const header = legendEl.querySelector('#legend-toggle-header');
-    if (header) {
-      header.addEventListener('click', () => {
-        legendCollapsed = !legendCollapsed;
-        updateLegend();
-      });
-    }
   }
 
   // Draw Commuter Flow Arcs (Die Zeit Radiant Gold & Cyan)

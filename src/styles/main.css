@@ -452,6 +452,23 @@ header.is-scrolled {
   filter: blur(0);
 }
 
+/* ── Semi-fullscreen map mode ─────────────────────────────────────────── */
+.map-wrapper-fullscreen {
+  position: fixed !important;
+  inset: 0;
+  z-index: 9999;
+  padding: 0.75rem;
+  background: #240816;
+  min-height: 100dvh !important;
+}
+
+@media (max-width: 768px) {
+  .geo-legend {
+    max-width: 170px !important;
+    font-size: 10.5px !important;
+  }
+}
+
 /* Header/subtitle smooth text transition */
 #stage-graphic-title,
 #stage-graphic-subtitle {
