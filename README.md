@@ -2,9 +2,8 @@
 
 **UAS Visualisasi Data**
 
-Raihan Taufiqurrahman Zaki
-3SD1
-222313332
+Raihan Taufiqurrahman Zaki - 222313332 - 3SD1
+
 ---
 
 ## Deskripsi
@@ -35,6 +34,17 @@ Narasi disajikan dalam format **scrollytelling** yaitu pembaca dapat menggulir h
 - **Lenis**: smooth scroll
 - **Tailwind CSS v4**: styling utility-first
 - **Vanilla JS (ES Modules)**
+
+## Proses Pengumpulan Data
+
+Data yang digunakan dalam proyek ini tidak tersedia dalam format siap pakai. Seluruh data dikumpulkan secara manual dari berbagai sumber mentah (raw data), antara lain:
+
+- **Query Builder BPS**: fitur tabel dinamis di situs [bps.go.id](https://www.bps.go.id) untuk mengunduh data statistik per indikator, provinsi, dan tahun.
+- **Dokumen Publikasi BPS**: file PDF/publikasi resmi seperti *Statistik Migrasi Indonesia*, *PDRB Kabupaten/Kota*, dan *Statistik Komuter Jabodetabek*.
+
+Dari berbagai sumber tersebut, data diekstrak secara manual ke dalam satu file Excel tunggal yaitu [`template_data.xlsx`](public/data/template_data.xlsx). File ini berfungsi sebagai *single source of truth* yang kemudian diolah dan dipecah menjadi dataset-dataset CSV/JSON final yang digunakan oleh setiap visualisasi.
+
+**Alur**: Raw Data (Query Builder + Dokumen PDF) -> Ekstraksi Manual -> `template_data.xlsx` -> Pengolahan -> Dataset Final (CSV/JSON)
 
 ## Sumber Data
 
