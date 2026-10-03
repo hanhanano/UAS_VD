@@ -115,6 +115,6 @@ npm run build
 
 | Info | Detail |
 |------|--------|
-| Mata Kuliah | Visualisasi Data |
+| Mata Kuliah | Visualisasi Data dan Informasi |
 | Semester | Genap 2025/2026 |
 | Dosen | Siti Mariyah, S.S.T., M.T., Ph.D |
