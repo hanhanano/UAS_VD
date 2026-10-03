@@ -1,7 +1,7 @@
 # Jakarta Dilepas, Bodetabek Dihuni
 **UAS Visualisasi Data**
-Raihan Taufiqurrahman Zaki 3SD1
-
+Kelas: 3SD1
+Nama: Raihan Taufiqurrahman Zaki
 ---
 
 ## Deskripsi
