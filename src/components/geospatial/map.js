@@ -9,48 +9,122 @@ export function renderGeoMap(containerId, geoBoundary, geoData, commuterData) {
   container.innerHTML = '';
 
   // Controls bar + map container
+  // Wrapper khusus agar control dan peta tersusun vertikal
+  const mapWrapper = document.createElement('div');
+  mapWrapper.className = 'w-full h-full flex flex-col gap-2';
+
+  // Controls bar
   const controlBar = document.createElement('div');
-  controlBar.className = 'absolute top-3 left-3 right-3 z-[1000] flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-[#3a0e22]/95 backdrop-blur-md border border-[#5a1b38] shadow-xl text-xs font-sans text-white';
+  controlBar.className =
+    'shrink-0 w-full flex flex-wrap items-center justify-between gap-2 ' +
+    'px-3 py-2.5 rounded-xl ' +
+    'bg-[#3a0e22]/95 backdrop-blur-md ' +
+    'border border-[#5a1b38] shadow-xl ' +
+    'text-xs font-sans text-white';
+
   controlBar.innerHTML = `
     <div class="flex items-center gap-2">
-      <label for="geo-metric-select" class="text-[#c9a0b5] font-bold uppercase tracking-wider text-[11px]">Choropleth (rasio):</label>
-      <select id="geo-metric-select" class="bg-[#280718] border border-[#5a1b38] text-white font-bold rounded-lg px-2.5 py-1 focus:outline-none focus:border-amber-400 shadow-xs cursor-pointer">
+      <label for="geo-metric-select"
+        class="text-[#c9a0b5] font-bold uppercase tracking-wider text-[11px]">
+        Choropleth (rasio):
+      </label>
+
+      <select id="geo-metric-select"
+        class="bg-[#280718] border border-[#5a1b38] text-white
+              font-bold rounded-lg px-2.5 py-1
+              focus:outline-none focus:border-amber-400
+              shadow-xs cursor-pointer">
+
         <option value="poverty">Tingkat Kemiskinan (%)</option>
         <option value="ipm">Indeks Pembangunan Manusia (IPM)</option>
         <option value="pdrb_per_capita">PDRB per Kapita (Juta Rp)</option>
       </select>
     </div>
+
     <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-      <label class="flex items-center gap-1.5 cursor-pointer text-[#d8b4c8] font-semibold">
-        <input type="checkbox" id="toggle-choropleth" checked class="rounded bg-[#280718] border-[#5a1b38] text-amber-500 focus:ring-0">
+
+      <label class="flex items-center gap-1.5 cursor-pointer
+                    text-[#d8b4c8] font-semibold">
+        <input type="checkbox"
+          id="toggle-choropleth"
+          checked
+          class="rounded bg-[#280718] border-[#5a1b38]
+                text-amber-500 focus:ring-0">
         <span>Choropleth</span>
       </label>
-      <label class="flex items-center gap-1.5 text-[#d8b4c8] font-semibold" title="Opasitas choropleth">
-        <input type="range" id="choropleth-opacity" min="20" max="100" step="5" value="78" class="w-16 accent-amber-400 cursor-pointer" aria-label="Opasitas choropleth">
+
+      <label class="flex items-center gap-1.5
+                    text-[#d8b4c8] font-semibold"
+            title="Opasitas choropleth">
+
+        <input type="range"
+          id="choropleth-opacity"
+          min="20"
+          max="100"
+          step="5"
+          value="78"
+          class="w-16 accent-amber-400 cursor-pointer"
+          aria-label="Opasitas choropleth">
       </label>
-      <label class="flex items-center gap-1.5 cursor-pointer text-[#d8b4c8] font-semibold">
-        <input type="checkbox" id="toggle-pop-symbols" checked class="rounded bg-[#280718] border-[#5a1b38] text-rose-400 focus:ring-0">
+
+      <label class="flex items-center gap-1.5 cursor-pointer
+                    text-[#d8b4c8] font-semibold">
+
+        <input type="checkbox"
+          id="toggle-pop-symbols"
+          checked
+          class="rounded bg-[#280718] border-[#5a1b38]
+                text-rose-400 focus:ring-0">
+
         <span>Simbol proporsional: penduduk</span>
       </label>
-      <label class="flex items-center gap-1.5 cursor-pointer text-[#d8b4c8] font-semibold">
-        <input type="checkbox" id="toggle-commuter-arcs" checked class="rounded bg-[#280718] border-[#5a1b38] text-amber-500 focus:ring-0">
+
+      <label class="flex items-center gap-1.5 cursor-pointer
+                    text-[#d8b4c8] font-semibold">
+
+        <input type="checkbox"
+          id="toggle-commuter-arcs"
+          checked
+          class="rounded bg-[#280718] border-[#5a1b38]
+                text-amber-500 focus:ring-0">
+
         <span>Arus komuter 2019</span>
       </label>
-      <button id="btn-zoom-jabodetabek" class="bg-[#280718] hover:bg-[#45122b] border border-[#5a1b38] text-[#d8b4c8] hover:text-white font-bold px-3 py-1 rounded-lg transition-colors shadow-xs cursor-pointer">
+
+      <button id="btn-zoom-jabodetabek"
+        class="bg-[#280718] hover:bg-[#45122b]
+              border border-[#5a1b38]
+              text-[#d8b4c8] hover:text-white
+              font-bold px-3 py-1 rounded-lg
+              transition-colors shadow-xs cursor-pointer">
         Jabodetabek
       </button>
-      <button id="btn-zoom-java" class="bg-[#280718] hover:bg-[#45122b] border border-[#5a1b38] text-[#d8b4c8] hover:text-white font-bold px-3 py-1 rounded-lg transition-colors shadow-xs cursor-pointer">
+
+      <button id="btn-zoom-java"
+        class="bg-[#280718] hover:bg-[#45122b]
+              border border-[#5a1b38]
+              text-[#d8b4c8] hover:text-white
+              font-bold px-3 py-1 rounded-lg
+              transition-colors shadow-xs cursor-pointer">
         Pulau Jawa
       </button>
+
     </div>
   `;
 
+  // Map
   const mapDiv = document.createElement('div');
   mapDiv.id = 'leaflet-map-element';
-  mapDiv.className = 'w-full h-full min-h-[500px] max-h-[620px] rounded-xl overflow-hidden';
 
-  container.appendChild(controlBar);
-  container.appendChild(mapDiv);
+  mapDiv.className =
+    'flex-1 min-h-0 w-full rounded-xl overflow-hidden';
+
+  // Susun vertikal
+  mapWrapper.appendChild(controlBar);
+  mapWrapper.appendChild(mapDiv);
+
+  // Hanya satu child dari sticky-graphic-stage
+  container.appendChild(mapWrapper);
 
   // Leaflet map
   const map = L.map('leaflet-map-element', {

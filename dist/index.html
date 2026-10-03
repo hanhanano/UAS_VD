@@ -10,8 +10,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,400;1,600&family=Yellowtail&display=swap"
     rel="stylesheet">
-  <script type="module" crossorigin src="/UAS_VD/assets/index-BwpTadgr.js"></script>
-  <link rel="stylesheet" crossorigin href="/UAS_VD/assets/index-Dt2sV3T8.css">
+  <script type="module" crossorigin src="/UAS_VD/assets/index-CJ0FlTFg.js"></script>
+  <link rel="stylesheet" crossorigin href="/UAS_VD/assets/index-Czjr0gAQ.css">
 </head>
 
 <body class="bg-[#3a0e22] text-[#f1e5ed] selection:bg-amber-400 selection:text-slate-950 font-medium">
@@ -131,11 +131,11 @@
         <div class="progress-dot is-active" data-dot="0" title="Mobilitas Nasional"></div>
         <div class="progress-dot" data-dot="1" title="Arus Keluar Jakarta"></div>
         <div class="progress-dot" data-dot="2" title="Matriks OD"></div>
-        <div class="progress-dot" data-dot="3" title="PCA Biplot"></div>
-        <div class="progress-dot" data-dot="4" title="Parallel Coords"></div>
-        <div class="progress-dot" data-dot="5" title="Heatmap Klaster"></div>
-        <div class="progress-dot" data-dot="6" title="Peta Jabodetabek"></div>
-        <div class="progress-dot" data-dot="7" title="Komuter"></div>
+        <div class="progress-dot" data-dot="3" title="Ternyata Tidak Jauh"></div>
+        <div class="progress-dot" data-dot="4" title="Mengapa Jakarta Melepas?"></div>
+        <div class="progress-dot" data-dot="5" title="Profil Jakarta"></div>
+        <div class="progress-dot" data-dot="6" title="Pola Multivariat"></div>
+        <div class="progress-dot" data-dot="7" title="Tetap Terhubung"></div>
         <div class="progress-dot" data-dot="8" title="Jaringan"></div>
       </div>
 
@@ -219,25 +219,21 @@
           <div class="step" data-step="3">
             <div class="glass-panel p-6 sm:p-7 rounded-2xl max-w-md">
               <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">
-                Apakah Provinsi Kaya Selalu Menarik Migran?
+                Ternyata, Mereka Tidak Pergi Jauh
               </h3>
-              <p class="text-sm text-[#f1e5ed] leading-relaxed mb-3">
-                Logika sederhana menyatakan: provinsi dengan IPM tinggi, pengeluaran besar, dan harapan hidup panjang
-                seharusnya menarik lebih banyak pendatang. Benarkah?
+              <p class="text-sm text-[#f1e5ed] leading-relaxed mb-4">
+                Arus keluar Jakarta ternyata sangat terkonsentrasi di wilayah sekitarnya. Jawa Barat dan Banten saja
+                menerima lebih dari 55% migran risen yang keluar dari DKI Jakarta.
               </p>
-              <p class="text-sm text-[#f1e5ed] leading-relaxed mb-3">
-                Analisis komponen utama (PCA) terhadap 8 indikator BPS menempatkan DKI Jakarta di ujung ekstrem ,
-                skor tertinggi pada hampir semua indikator kemajuan. Namun justru DKI yang
-                <em class="text-rose-400 font-semibold">paling banyak melepas</em> penduduk (neto −55,6 per 1.000),
-                bukan menarik.
-              </p>
+              <div class="grid grid-cols-2 gap-2 text-xs font-semibold mb-4 text-[#f1e5ed]">
+                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Depok</div>
+                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Bekasi</div>
+                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Tangerang</div>
+                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Tangerang Selatan</div>
+              </div>
               <p class="text-xs text-[#c9a0b5] leading-relaxed">
-                Korelasi antara "kemajuan" dan arah migrasi nyaris nol (0,11 tanpa DKI). Artinya:
-                <strong class="text-white">indikator makro saja tidak cukup menjelaskan ke mana orang pindah.</strong>
-              </p>
-              <p class="text-[11px] text-amber-300/90 leading-relaxed mt-3 font-semibold">
-                Coba sendiri: seret kotak di plot PCA untuk memilih beberapa provinsi, dan lihat profil
-                delapan indikatornya menebal di koordinat paralel di sebelahnya.
+                Peta di samping mempersempit pandangan dari arus nasional ke Pulau Jawa. Kedekatan wilayah membuat
+                perpindahan Jakarta–Bodetabek menjadi bagian penting dari cerita mobilitas ini.
               </p>
             </div>
           </div>
@@ -246,11 +242,32 @@
           <div class="step" data-step="4">
             <div class="glass-panel p-6 sm:p-7 rounded-2xl max-w-md">
               <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">
-                Apa yang Membuat Jakarta Berbeda?
+                Tetapi, Mengapa Jakarta Banyak Melepas Penduduk?
+              </h3>
+              <p class="text-sm text-[#f1e5ed] leading-relaxed mb-3">
+                Setelah mengetahui ke mana penduduk berpindah, muncul pertanyaan berikutnya: apakah karakteristik
+                sosial-ekonomi provinsi dapat menjelaskan pola tersebut?
+              </p>
+              <p class="text-sm text-[#f1e5ed] leading-relaxed mb-3">
+                PCA terhadap delapan indikator BPS menempatkan DKI Jakarta pada posisi yang sangat ekstrem. Namun,
+                provinsi dengan skor pembangunan tinggi ini justru mencatat migrasi neto negatif sebesar 55,6 per 1.000 penduduk.
+              </p>
+              <p class="text-xs text-[#c9a0b5] leading-relaxed">
+                Korelasi antara komponen pembangunan dan arah migrasi hanya 0,11 ketika DKI dikeluarkan.
+                <strong class="text-white">Karakteristik makro saja belum cukup untuk menjelaskan pola perpindahan.</strong>
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="step" data-step="5">
+            <div class="glass-panel p-6 sm:p-7 rounded-2xl max-w-md">
+              <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">
+                Jakarta Memiliki Profil yang Sangat Berbeda
               </h3>
               <p class="text-sm text-[#f1e5ed] leading-relaxed mb-4">
-                Ikuti garis emas DKI Jakarta melintasi delapan indikator. Pola yang muncul mengejutkan: Jakarta
-                unggul di hampir semua hal, <em class="text-rose-400">kecuali</em> satu.
+                Delapan indikator memperlihatkan bahwa Jakarta bukan sekadar salah satu provinsi dengan pembangunan
+                tinggi. Profilnya berbeda tajam dari sebagian besar provinsi lain.
               </p>
               <div class="space-y-1.5 text-xs text-[#d8b4c8] font-semibold mb-4">
                 <div>• Kepadatan penduduk: <span class="text-amber-400 font-bold">15.907 jiwa/km²</span>
@@ -264,35 +281,8 @@
                 </div>
               </div>
               <p class="text-xs text-[#c9a0b5] leading-relaxed">
-                Paradoksnya: kota terkaya sekaligus kota dengan pengangguran tertinggi. Biaya hidup tinggi
-                dan persaingan ketat bisa jadi mendorong penduduk mencari ruang bernapas di luar batas
-                administrasi Jakarta.
-              </p>
-            </div>
-          </div>
-
-          <!-- Step 5 -->
-          <div class="step" data-step="5">
-            <div class="glass-panel p-6 sm:p-7 rounded-2xl max-w-md">
-              <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">
-                Adakah Pola Tersembunyi di Balik Angka?
-              </h3>
-              <p class="text-sm text-[#f1e5ed] leading-relaxed mb-4">
-                Jika indikator tunggal tidak cukup menjelaskan arah migrasi, bagaimana jika kita melihat semua
-                indikator sekaligus? Heatmap ini mengelompokkan provinsi berdasarkan
-                <em class="text-amber-400">kemiripan profil multivariat</em> , bukan satu angka, tapi pola
-                keseluruhan.
-              </p>
-              <p class="text-xs text-[#c9a0b5] leading-relaxed mb-3">
-                Hasilnya: enam provinsi (Papua, Papua Barat, NTT, NTB, Gorontalo, Sulawesi Barat) membentuk
-                klaster tersendiri dengan IPM rata-rata 65,6 dan kemiskinan 18,5% , jauh di bawah 28 provinsi
-                lainnya.
-              </p>
-              <p class="text-xs text-[#c9a0b5] leading-relaxed">
-                Namun pemisahan ini lemah (silhouette 0,28).
-                <strong class="text-white">Tidak ada garis tegas yang membelah Indonesia menjadi
-                  "provinsi penarik" dan "provinsi pelepas."</strong> Lalu jika bukan indikator makro,
-                apa yang sebenarnya terjadi?
+                Profil yang sangat khas ini membantu menunjukkan bahwa hubungan antara kondisi sosial-ekonomi dan
+                migrasi tidak sederhana. Visualisasi berikutnya melihat pola tersebut secara keseluruhan melalui klaster.
               </p>
             </div>
           </div>
@@ -301,26 +291,21 @@
           <div class="step" data-step="6">
             <div class="glass-panel p-6 sm:p-7 rounded-2xl max-w-md">
               <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">
-                <span class="text-rose-400">Plot Twist:</span> Mereka Tidak Benar-Benar Pergi
+                Tidak Ada Batas Tegas antara "Penarik" dan "Pelepas"
               </h3>
-              <p class="text-sm text-[#f1e5ed] leading-relaxed mb-3">
-                Sampai sini, data menunjukkan ratusan ribu orang "meninggalkan" Jakarta. Tapi ke mana?
-                Jawaban mengejutkan:
-                <strong class="text-amber-400">mayoritas hanya pindah ke seberang batas kota.</strong>
-              </p>
               <p class="text-sm text-[#f1e5ed] leading-relaxed mb-4">
-                Empat kota penyangga utama , semuanya berjarak kurang dari 30 km dari pusat Jakarta:
+                Heatmap mengelompokkan provinsi berdasarkan kemiripan delapan indikator sekaligus. Enam provinsi
+                (Papua, Papua Barat, NTT, NTB, Gorontalo, Sulawesi Barat) membentuk klaster tersendiri dengan IPM
+                rata-rata 65,6 dan kemiskinan 18,5%.
               </p>
-              <div class="grid grid-cols-2 gap-2 text-xs font-semibold mb-4 text-[#f1e5ed]">
-                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Depok</div>
-                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Bekasi</div>
-                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Tangerang</div>
-                <div class="p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38] text-center">Kota Tangerang Selatan
-                </div>
-              </div>
+              <p class="text-xs text-[#c9a0b5] leading-relaxed mb-3">
+                Namun, pemisahan klaster relatif lemah dengan silhouette score 0,28.
+                <strong class="text-white">Tidak terlihat kelompok sosial-ekonomi yang secara sederhana dapat
+                  disebut sebagai provinsi penarik atau pelepas migran.</strong>
+              </p>
               <p class="text-xs text-[#c9a0b5] leading-relaxed">
-                Peta di samping menampilkan kondisi tiap kabupaten/kota (data 2020). Perhatikan bagaimana
-                wilayah penyangga Jakarta memiliki profil yang mirip satu sama lain.
+                Karena indikator makro belum memberikan jawaban yang tegas, kita kembali ke arus pergerakannya:
+                apakah pindah domisili juga berarti putus dari Jakarta?
               </p>
             </div>
           </div>
@@ -329,40 +314,39 @@
           <div class="step" data-step="7">
             <div class="glass-panel p-6 sm:p-7 rounded-2xl max-w-md">
               <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">
-                797 Ribu Pindah Domisili, 1,26 Juta Tetap Ulang-Alik
+                Pindah Domisili, Tetap Terhubung dengan Jakarta
               </h3>
               <div class="flex gap-3 mb-4">
                 <div class="flex-1 p-3 rounded-xl bg-[#2e091b] border border-[#5a1b38] text-center">
                   <div class="text-2xl font-extrabold text-rose-400">797.468</div>
-                  <div class="text-[10px] text-[#c9a0b5] mt-1">pindah domisili<br>keluar DKI (2020)</div>
+                  <div class="text-[10px] text-[#c9a0b5] mt-1">migran risen keluar<br>DKI (2020)</div>
                 </div>
                 <div class="flex-1 p-3 rounded-xl bg-[#2e091b] border border-amber-500/30 text-center">
-                  <div class="text-2xl font-extrabold text-amber-400">1.260.000</div>
-                  <div class="text-[10px] text-[#c9a0b5] mt-1">komuter harian<br>masuk DKI (2019)</div>
+                  <div class="text-2xl font-extrabold text-amber-400">1,26 juta</div>
+                  <div class="text-[10px] text-[#c9a0b5] mt-1">komuter masuk<br>DKI (2019)</div>
                 </div>
               </div>
               <p class="text-sm text-[#f1e5ed] leading-relaxed mb-4">
-                Angka komuter masuk ke DKI <strong class="text-amber-400">hampir dua kali lipat</strong>
-                jumlah yang pindah domisili keluar. Arah sebaliknya? Hanya 244 ribu , lima kali lebih kecil.
+                Data komuter memberikan sudut pandang berbeda: meskipun sebagian penduduk berpindah tempat tinggal ke
+                sekitar Jakarta, arus harian menuju Jakarta tetap sangat besar.
               </p>
               <div class="space-y-1.5 text-xs mb-4">
                 <div class="flex justify-between p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38]">
-                  <span class="text-[#d8b4c8] font-medium">Depok &rarr; Jakarta Selatan</span>
+                  <span class="text-[#d8b4c8] font-medium">Depok → Jakarta Selatan</span>
                   <span class="font-bold text-amber-400">158.991 orang</span>
                 </div>
                 <div class="flex justify-between p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38]">
-                  <span class="text-[#d8b4c8] font-medium">Kota Bekasi &rarr; Jakarta Timur</span>
+                  <span class="text-[#d8b4c8] font-medium">Kota Bekasi → Jakarta Timur</span>
                   <span class="font-bold text-amber-400">110.532 orang</span>
                 </div>
                 <div class="flex justify-between p-2.5 rounded-lg bg-[#2e091b] border border-[#5a1b38]">
-                  <span class="text-[#d8b4c8] font-medium">Tangsel &rarr; Jakarta Selatan</span>
+                  <span class="text-[#d8b4c8] font-medium">Tangsel → Jakarta Selatan</span>
                   <span class="font-bold text-amber-400">92.429 orang</span>
                 </div>
               </div>
               <p class="text-xs text-[#c9a0b5] font-normal leading-relaxed">
-                Orang-orang ini bukan pergi , mereka hanya
-                <em class="text-white font-medium">menggeser alamat KTP</em>, sambil tetap menghidupi
-                ekonomi Jakarta setiap hari.
+                Migrasi dan komuter mengukur hal yang berbeda, tetapi keduanya menunjukkan keterhubungan kuat antara
+                Jakarta dan wilayah penyangganya.
               </p>
             </div>
           </div>
@@ -444,12 +428,12 @@
 
                 <!-- Kontrol jaringan: ambang bobot edge + toggle graf/matriks -->
                 <div id="stage-network-controls" class="flex flex-wrap items-center gap-x-3 gap-y-1.5" style="display:none">
-                  <div class="flex items-center gap-1 text-[11px]" role="group" aria-label="Mode tampilan jaringan">
+                  <!-- <div class="flex items-center gap-1 text-[11px]" role="group" aria-label="Mode tampilan jaringan">
                     <button type="button" id="net-mode-graph" data-mode="graph"
                       class="net-mode-btn px-2 py-0.5 rounded-md font-bold bg-amber-400 text-slate-950">Graf</button>
                     <button type="button" id="net-mode-matrix" data-mode="matrix"
                       class="net-mode-btn px-2 py-0.5 rounded-md font-bold bg-[#280718] border border-[#5a1b38] text-[#d8b4c8]">Matriks adjacency</button>
-                  </div>
+                  </div> -->
                   <div class="flex items-center gap-1.5 text-xs text-[#d8b4c8]">
                     <span class="text-[10px] uppercase font-bold text-[#c9a0b5]">Ambang Edge:</span>
                     <input type="range" id="network-threshold-slider" min="0" max="50000" step="500" value="5000"

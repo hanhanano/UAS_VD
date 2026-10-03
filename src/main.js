@@ -176,15 +176,15 @@ function getViewMeta(viewName) {
   const meta = {
     chord: {
       title: 'Diagram Aliran Migrasi Risen (Chord Diagram)',
-      subtitle: 'Volume dan arah perpindahan penduduk antar 34 provinsi di Indonesia',
+      subtitle: 'Arah perpindahan penduduk antar provinsi',
     },
     ranking: {
       title: 'Distribusi Destinasi Migran Keluar DKI Jakarta',
-      subtitle: '797.468 migran risen keluar dari DKI; 55,5% di antaranya menuju Jawa Barat dan Banten',
+      subtitle: '797.468 migran risen keluar dari DKI',
     },
     od_matrix: {
-      title: 'Matriks Asal-Tujuan',
-      subtitle: 'Heatmap seluruh pasangan provinsi',
+      title: '⠀ ⠀ ⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ Matriks Asal-Tujuan',
+      subtitle: 'Heatmap provinsi',
     },
     linked: {
       title: 'PCA + Koordinat Paralel Terhubung (Brushing & Linking)',
@@ -203,8 +203,8 @@ function getViewMeta(viewName) {
       subtitle: 'Pengelompokan 34 provinsi berdasarkan kemiripan struktur indikator multivariat',
     },
     map: {
-      title: 'Peta Geospasial Kab/Kota & Garis Komuter 2019',
-      subtitle: 'Arus komuter antar-kab/kota Jabodetabek 2019',
+      title: 'Peta Geospasial & Mobilitas Jabodetabek',
+      subtitle: 'Wilayah penyangga Jakarta dan arus komuter 2019',
     },
     network: {
       title: 'Graf Jaringan Force-Directed & Hub Migrasi',
@@ -220,10 +220,10 @@ const stepViewMap = [
   'chord',
   'ranking',
   'od_matrix',
-  'pca',
+  'map',
+  'linked',
   'parallel',
   'heatmap',
-  'map',
   'map',
   'network'
 ];
@@ -233,10 +233,10 @@ const stepInsights = [
   { label: 'Migran Risen Nasional', text: '4,14 juta jiwa' },
   { label: 'Keluar DKI Jakarta', text: '797.468 jiwa' },
   { label: 'Pasangan Aktif', text: '1.061 dari 1.122' },
+  { label: 'Arus ke Jabar + Banten', text: '55,5%' },
   { label: 'Variansi PC1', text: '55,6%' },
   { label: 'Kepadatan DKI', text: '15.907 jiwa/km²' },
   { label: 'Silhouette Score', text: '0,28 (lemah)' },
-  { label: 'Kota Penyangga', text: '4 kota < 30 km' },
   { label: 'Komuter Masuk DKI', text: '1,26 juta/hari' },
   { label: 'Pelepas Terbesar', text: 'DKI Jakarta' },
 ];
@@ -275,7 +275,7 @@ function onStepEnter(stepIndex) {
   const afterRender = targetView === 'map'
     ? () => {
       if (!geoController) return;
-      if (stepIndex === 6) {
+      if (stepIndex === 3) {
         geoController.flyToJava();
         geoController.setMetric('poverty');
         geoController.setSymbols(false); // fokus ke choropleth kuantil
