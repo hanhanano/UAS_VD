@@ -2,12 +2,15 @@ import * as d3 from 'd3';
 import { showTooltip, moveTooltip, hideTooltip } from '../../utils/tooltip.js';
 import { state } from '../../state.js';
 
-export function renderParallelCoords(containerId, multivarData) {
+export function renderParallelCoords(containerId, multivarData, opts = {}) {
+  const compact = Boolean(opts.compact);
   const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = '';
 
-  const margin = { top: 40, right: 30, bottom: 30, left: 30 };
+  const margin = compact
+    ? { top: 44, right: 14, bottom: 24, left: 20 }
+    : { top: 40, right: 30, bottom: 30, left: 30 };
   const width = (container.clientWidth || 650) - margin.left - margin.right;
   const height = (container.clientHeight || 520) - margin.top - margin.bottom;
 
@@ -23,6 +26,11 @@ export function renderParallelCoords(containerId, multivarData) {
     { key: 'kepadatan_penduduk', label: 'Kepadatan' }
   ];
 
+  const shortLabels = {
+    ipm: 'IPM', uhh: 'UHH', hls: 'HLS', rls: 'RLS',
+    pengeluaran_per_kapita: 'Peng.', persentase_miskin: 'Miskin', tpt: 'TPT', kepadatan_penduduk: 'Padat'
+  };
+
   const yScales = {};
   dimensions.forEach(dim => {
     const vals = points.map(p => p.z[dim.key]);
@@ -35,7 +43,7 @@ export function renderParallelCoords(containerId, multivarData) {
 
   const xScale = d3.scalePoint()
     .range([0, width])
-    .padding(0.1)
+    .padding(compact ? 0.06 : 0.1)
     .domain(dimensions.map(d => d.key));
 
   const svg = d3.select(container)
@@ -86,7 +94,8 @@ export function renderParallelCoords(containerId, multivarData) {
       hideTooltip();
     })
     .on('click', (event, d) => {
-      state.setSelectedProvince(d.code);
+      if (event.shiftKey) state.toggleProvince(d.code);
+      else state.setSelectedProvince(d.code);
     });
 
   // Draw axes
@@ -97,11 +106,11 @@ export function renderParallelCoords(containerId, multivarData) {
     .attr('transform', d => `translate(${xScale(d.key)},0)`);
 
   axes.each(function(d) {
-    d3.select(this).call(d3.axisLeft(yScales[d.key]).ticks(5).tickSize(3));
+    d3.select(this).call(d3.axisLeft(yScales[d.key]).ticks(compact ? 3 : 5).tickSize(3));
   });
 
   axes.selectAll('text')
-    .attr('class', 'text-[10px] fill-[#c9a0b5] font-sans');
+    .attr('class', compact ? 'text-[8px] fill-[#c9a0b5] font-sans' : 'text-[10px] fill-[#c9a0b5] font-sans');
   axes.selectAll('path, line')
     .attr('stroke', '#6b2548');
 
@@ -109,8 +118,8 @@ export function renderParallelCoords(containerId, multivarData) {
   axes.append('text')
     .attr('y', -12)
     .attr('text-anchor', 'middle')
-    .attr('class', 'text-xs font-bold fill-amber-400 font-sans')
-    .text(d => d.label);
+    .attr('class', compact ? 'text-[9px] font-bold fill-amber-400 font-sans' : 'text-xs font-bold fill-amber-400 font-sans')
+    .text(d => compact ? shortLabels[d.key] : d.label);
 
   // Baseline 0
   svg.append('line')
@@ -120,34 +129,31 @@ export function renderParallelCoords(containerId, multivarData) {
     .attr('stroke-dasharray', '2,2')
     .attr('opacity', 0.8);
 
-  function updateHighlight(activeCode) {
+  function updateHighlight() {
+    const focus = state.focusSet();
+    const hasFocus = focus.size > 0;
     lines.each(function(d) {
-      const isSelected = d.code === activeCode;
+      const isSelected = focus.has(d.code);
       const isDKI = d.code === '31';
       const el = d3.select(this);
 
       if (isSelected) {
         el.attr('stroke', isDKI ? '#fbbf24' : '#38bdf8')
-          .attr('stroke-width', 4.5)
+          .attr('stroke-width', focus.size > 6 ? 2.6 : 4.5)
           .attr('opacity', 1)
           .raise();
       } else {
         el.attr('stroke', isDKI ? '#fbbf24' : (['32', '36'].includes(d.code) ? '#38bdf8' : '#6b2548'))
           .attr('stroke-width', isDKI ? 3.5 : 1.2)
-          .attr('opacity', activeCode ? 0.15 : (isDKI ? 1 : 0.45));
+          .attr('opacity', hasFocus ? 0.15 : (isDKI ? 1 : 0.45));
       }
     });
   }
 
-  const unsubHover = state.on('province:hover', (code) => {
-    updateHighlight(code || state.selectedProvince);
-  });
+  const unsubHover = state.on('province:hover', updateHighlight);
+  const unsubSelect = state.on('selection:change', updateHighlight);
 
-  const unsubSelect = state.on('province:select', (code) => {
-    updateHighlight(code);
-  });
-
-  updateHighlight(state.selectedProvince);
+  updateHighlight();
 
   return () => {
     unsubHover();

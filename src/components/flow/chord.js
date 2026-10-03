@@ -22,7 +22,9 @@ export function renderChord(containerId, flowData) {
     const s = nodeIndexMap.get(link.source);
     const t = nodeIndexMap.get(link.target);
     if (s !== undefined && t !== undefined && s !== t) {
-      if (link.value >= state.flowThreshold) {
+      const passOrigin = !state.flowOrigin || link.source === state.flowOrigin;
+      const passDest = !state.flowDest || link.target === state.flowDest;
+      if (link.value >= state.flowThreshold && passOrigin && passDest) {
         matrix[s][t] = link.value;
       }
     }
@@ -142,30 +144,34 @@ export function renderChord(containerId, flowData) {
       d3.select(event.currentTarget).attr('fill-opacity', 0.5);
     });
 
-  // Reactive highlight
-  function updateHighlight(activeId) {
-    if (!activeId) {
+  // Pesan jika kombinasi filter tidak menghasilkan arus
+  if (chords.length === 0) {
+    svg.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('class', 'text-xs font-semibold fill-[#c9a0b5] font-sans')
+      .text('Tidak ada arus yang memenuhi filter asal, tujuan, dan ambang volume');
+  }
+
+  // Reactive highlight (mendukung seleksi jamak)
+  function updateHighlight() {
+    const active = state.focusSet();
+    if (active.size === 0) {
       ribbons.transition().duration(200)
         .attr('fill-opacity', 0.5)
         .attr('stroke-opacity', 0.5);
       return;
     }
-
-    const activeIdx = nodeIndexMap.get(activeId);
+    const activeIdx = new Set([...active].map(id => nodeIndexMap.get(id)));
+    const hit = d => activeIdx.has(d.source.index) || activeIdx.has(d.target.index);
     ribbons.transition().duration(200)
-      .attr('fill-opacity', d => (d.source.index === activeIdx || d.target.index === activeIdx) ? 0.85 : 0.06)
-      .attr('stroke-opacity', d => (d.source.index === activeIdx || d.target.index === activeIdx) ? 1 : 0.05);
+      .attr('fill-opacity', d => hit(d) ? 0.85 : 0.06)
+      .attr('stroke-opacity', d => hit(d) ? 1 : 0.05);
   }
 
-  const unsubscribeHover = state.on('province:hover', (code) => {
-    updateHighlight(code || state.selectedProvince);
-  });
+  const unsubscribeHover = state.on('province:hover', updateHighlight);
+  const unsubscribeSelect = state.on('selection:change', updateHighlight);
 
-  const unsubscribeSelect = state.on('province:select', (code) => {
-    updateHighlight(code);
-  });
-
-  updateHighlight(state.selectedProvince);
+  updateHighlight();
 
   return () => {
     unsubscribeHover();

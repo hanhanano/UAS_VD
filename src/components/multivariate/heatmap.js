@@ -105,25 +105,22 @@ export function renderClusteredHeatmap(containerId, multivarData, pcaData) {
           state.setHoveredProvince(null);
           hideTooltip();
         })
-        .on('click', () => {
-          state.setSelectedProvince(province.code);
+        .on('click', (event) => {
+          if (event.shiftKey) state.toggleProvince(province.code);
+          else state.setSelectedProvince(province.code);
         });
     });
   });
 
-  function updateHighlight(activeCode) {
-    rows.attr('opacity', d => (!activeCode || d.code === activeCode) ? 1 : 0.35);
+  function updateHighlight() {
+    const focus = state.focusSet();
+    rows.attr('opacity', d => (focus.size === 0 || focus.has(d.code)) ? 1 : 0.35);
   }
 
-  const unsubHover = state.on('province:hover', (code) => {
-    updateHighlight(code || state.selectedProvince);
-  });
+  const unsubHover = state.on('province:hover', updateHighlight);
+  const unsubSelect = state.on('selection:change', updateHighlight);
 
-  const unsubSelect = state.on('province:select', (code) => {
-    updateHighlight(code);
-  });
-
-  updateHighlight(state.selectedProvince);
+  updateHighlight();
 
   return () => {
     unsubHover();

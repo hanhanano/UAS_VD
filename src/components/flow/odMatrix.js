@@ -140,15 +140,16 @@ export function renderODMatrix(containerId, flowData) {
       applyThresholdAndHighlight();
     })
     .on('click', (event, d) => {
-      if (!d.isDiagonal) {
-        state.setSelectedProvince(d.source.id);
-      }
+      if (d.isDiagonal) return;
+      if (event.shiftKey) state.toggleProvince(d.source.id);
+      else state.setSelectedProvince(d.source.id);
     });
 
-  // Combined highlight + threshold logic
-  function applyThresholdAndHighlight(activeId) {
+  // Gabungan: ambang volume + filter asal/tujuan + sorotan seleksi
+  function applyThresholdAndHighlight() {
     const threshold = state.flowThreshold;
-    const focusId = activeId !== undefined ? activeId : state.selectedProvince;
+    const focus = state.focusSet();
+    const { flowOrigin, flowDest } = state;
 
     rects.each(function(d) {
       const el = d3.select(this);
@@ -157,19 +158,21 @@ export function renderODMatrix(containerId, flowData) {
         return;
       }
 
+      const outsideFilter = (flowOrigin && d.source.id !== flowOrigin) || (flowDest && d.target.id !== flowDest);
       const belowThreshold = d.value > 0 && d.value < threshold;
-      const isFocused = !focusId || d.source.id === focusId || d.target.id === focusId;
+      const isFocused = focus.size === 0 || focus.has(d.source.id) || focus.has(d.target.id);
 
       let opacity;
-      if (belowThreshold) {
+      if (outsideFilter) {
+        opacity = 0.05;
+      } else if (belowThreshold) {
         opacity = isFocused ? 0.15 : 0.08;
       } else {
         opacity = isFocused ? 1 : 0.25;
       }
-
       el.attr('opacity', opacity);
 
-      if (belowThreshold && d.value > 0) {
+      if (outsideFilter || belowThreshold) {
         el.attr('fill', '#1a0510');
       } else if (d.value === 0) {
         el.attr('fill', '#2d0a1b');
@@ -180,12 +183,10 @@ export function renderODMatrix(containerId, flowData) {
   }
 
   // Subscribe to state changes
-  const unsubSelect = state.on('province:select', (code) => applyThresholdAndHighlight(code));
-  const unsubHover = state.on('province:hover', (code) => {
-    if (code) applyThresholdAndHighlight(code);
-    else applyThresholdAndHighlight();
-  });
-  const unsubThreshold = state.on('flow:threshold', () => applyThresholdAndHighlight());
+  const unsubSelect = state.on('selection:change', applyThresholdAndHighlight);
+  const unsubHover = state.on('province:hover', applyThresholdAndHighlight);
+  const unsubThreshold = state.on('flow:threshold', applyThresholdAndHighlight);
+  const unsubFilter = state.on('flow:filter', applyThresholdAndHighlight);
 
   applyThresholdAndHighlight();
 
@@ -193,5 +194,6 @@ export function renderODMatrix(containerId, flowData) {
     unsubSelect();
     unsubHover();
     unsubThreshold();
+    unsubFilter();
   };
 }

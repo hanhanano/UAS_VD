@@ -233,6 +233,10 @@
                 Korelasi antara "kemajuan" dan arah migrasi nyaris nol (0,11 tanpa DKI). Artinya:
                 <strong class="text-white">indikator makro saja tidak cukup menjelaskan ke mana orang pindah.</strong>
               </p>
+              <p class="text-[11px] text-amber-300/90 leading-relaxed mt-3 font-semibold">
+                Coba sendiri: seret kotak di plot PCA untuk memilih beberapa provinsi, dan lihat profil
+                delapan indikatornya menebal di koordinat paralel di sebelahnya.
+              </p>
             </div>
           </div>
 
@@ -392,6 +396,7 @@
                   <button class="tab-btn" data-view="chord">Chord</button>
                   <button class="tab-btn" data-view="ranking">Ranking DKI</button>
                   <button class="tab-btn" data-view="od_matrix">Matriks OD</button>
+                  <button class="tab-btn" data-view="linked">PCA + Paralel</button>
                   <button class="tab-btn" data-view="pca">PCA Biplot</button>
                   <button class="tab-btn" data-view="parallel">Parallel Coords</button>
                   <button class="tab-btn" data-view="heatmap">Heatmap</button>
@@ -411,14 +416,45 @@
                   </p>
                 </div>
 
-                <!-- Flow threshold slider -->
-                <div id="stage-slider-container" class="flex items-center gap-3 transition-opacity duration-200">
+                <!-- Kontrol aliran: ambang volume + filter asal/tujuan -->
+                <div id="stage-slider-container" class="flex flex-wrap items-center gap-x-3 gap-y-1.5 transition-opacity duration-200">
+                  <div class="flex items-center gap-1.5 text-xs text-[#d8b4c8]">
+                    <label for="flow-origin-select" class="text-[10px] uppercase font-bold text-[#c9a0b5]">Asal:</label>
+                    <select id="flow-origin-select"
+                      class="bg-[#280718] border border-[#5a1b38] text-white text-[11px] font-bold rounded-md px-1.5 py-0.5 max-w-[120px] focus:outline-none focus:border-amber-400 cursor-pointer">
+                      <option value="">Semua</option>
+                    </select>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-xs text-[#d8b4c8]">
+                    <label for="flow-dest-select" class="text-[10px] uppercase font-bold text-[#c9a0b5]">Tujuan:</label>
+                    <select id="flow-dest-select"
+                      class="bg-[#280718] border border-[#5a1b38] text-white text-[11px] font-bold rounded-md px-1.5 py-0.5 max-w-[120px] focus:outline-none focus:border-amber-400 cursor-pointer">
+                      <option value="">Semua</option>
+                    </select>
+                  </div>
                   <div class="flex items-center gap-1.5 text-xs text-[#d8b4c8]">
                     <span class="text-[10px] uppercase font-bold text-[#c9a0b5]">Filter Arus:</span>
                     <input type="range" id="flow-threshold-slider" min="0" max="15000" step="500" value="2500"
-                      class="w-20 accent-amber-400 cursor-pointer">
+                      class="w-20 accent-amber-400 cursor-pointer" aria-label="Ambang volume arus migrasi">
                     <span id="flow-threshold-value" class="font-bold text-amber-400 text-[11px]">2.500 jiwa</span>
                   </div>
+                </div>
+
+                <!-- Kontrol jaringan: ambang bobot edge + toggle graf/matriks -->
+                <div id="stage-network-controls" class="flex flex-wrap items-center gap-x-3 gap-y-1.5" style="display:none">
+                  <!-- <div class="flex items-center gap-1 text-[11px]" role="group" aria-label="Mode tampilan jaringan">
+                    <button type="button" id="net-mode-graph" data-mode="graph"
+                      class="net-mode-btn px-2 py-0.5 rounded-md font-bold bg-amber-400 text-slate-950">Graf</button>
+                    <button type="button" id="net-mode-matrix" data-mode="matrix"
+                      class="net-mode-btn px-2 py-0.5 rounded-md font-bold bg-[#280718] border border-[#5a1b38] text-[#d8b4c8]">Matriks adjacency</button>
+                  </div> -->
+                  <div class="flex items-center gap-1.5 text-xs text-[#d8b4c8]">
+                    <span class="text-[10px] uppercase font-bold text-[#c9a0b5]">Ambang Edge:</span>
+                    <input type="range" id="network-threshold-slider" min="0" max="50000" step="500" value="5000"
+                      class="w-24 accent-amber-400 cursor-pointer" aria-label="Ambang bobot edge jaringan">
+                    <span id="network-threshold-value" class="font-bold text-amber-400 text-[11px]">5.000 jiwa</span>
+                  </div>
+                  <span id="network-edge-count" class="text-[10px] text-[#c9a0b5] font-semibold"></span>
                 </div>
               </div>
             </div>

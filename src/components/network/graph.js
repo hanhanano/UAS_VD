@@ -10,7 +10,7 @@ export function renderNetworkGraph(containerId, networkData) {
   const width = container.clientWidth || 650;
   const height = container.clientHeight || 550;
 
-  const minThreshold = state.networkThreshold || 5000;
+  const minThreshold = state.networkThreshold;
   const filteredLinks = networkData.links
     .filter(l => l.value >= minThreshold)
     .map(d => ({ ...d }));
@@ -85,6 +85,15 @@ export function renderNetworkGraph(containerId, networkData) {
     .attr('paint-order', 'stroke')
     .text(d => d.weighted_strength > 100000 || ['31', '32', '36'].includes(d.id) ? d.name : '');
 
+  // Linking: node terpilih diberi cincin emas, node lain meredup bila ada seleksi
+  function applySelection() {
+    const sel = state.selectedProvinces;
+    node.select('circle')
+      .attr('stroke', d => sel.has(d.id) ? '#fbbf24' : '#ffffff')
+      .attr('stroke-width', d => sel.has(d.id) ? 4 : 1.8);
+    node.attr('opacity', d => (sel.size === 0 || sel.has(d.id)) ? 1 : 0.55);
+  }
+
   // Hover interactions
   node.on('mouseover', (event, d) => {
     state.setHoveredProvince(d.id);
@@ -136,12 +145,16 @@ export function renderNetworkGraph(containerId, networkData) {
   .on('mouseout', () => {
     state.setHoveredProvince(null);
     hideTooltip();
-    node.attr('opacity', 1);
+    applySelection();
     link.attr('stroke', '#521836').attr('stroke-opacity', 0.65);
   })
   .on('click', (event, d) => {
-    state.setSelectedProvince(d.id);
+    if (event.shiftKey) state.toggleProvince(d.id);
+    else state.setSelectedProvince(d.id);
   });
+
+  applySelection();
+  const unsubSelect = state.on('selection:change', applySelection);
 
   // Simulation tick
   simulation.on('tick', () => {
@@ -174,5 +187,6 @@ export function renderNetworkGraph(containerId, networkData) {
 
   return () => {
     simulation.stop();
+    unsubSelect();
   };
 }

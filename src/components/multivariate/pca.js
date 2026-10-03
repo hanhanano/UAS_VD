@@ -2,12 +2,15 @@ import * as d3 from 'd3';
 import { showTooltip, moveTooltip, hideTooltip } from '../../utils/tooltip.js';
 import { state } from '../../state.js';
 
-export function renderPCAPlot(containerId, multivarData, pcaData) {
+export function renderPCAPlot(containerId, multivarData, pcaData, opts = {}) {
+  const compact = Boolean(opts.compact);
   const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = '';
 
-  const margin = { top: 40, right: 40, bottom: 55, left: 60 };
+  const margin = compact
+    ? { top: 44, right: 16, bottom: 46, left: 40 }
+    : { top: 40, right: 40, bottom: 55, left: 60 };
   const width = (container.clientWidth || 650) - margin.left - margin.right;
   const height = (container.clientHeight || 520) - margin.top - margin.bottom;
 
@@ -50,13 +53,13 @@ export function renderPCAPlot(containerId, multivarData, pcaData) {
   svg.append('g')
     .attr('transform', `translate(0,${height})`)
     .attr('class', 'text-xs text-[#c9a0b5] font-sans')
-    .call(d3.axisBottom(x).ticks(8))
+    .call(d3.axisBottom(x).ticks(compact ? 5 : 8))
     .selectAll('path, line')
     .attr('stroke', '#6b2548');
 
   svg.append('g')
     .attr('class', 'text-xs text-[#c9a0b5] font-sans')
-    .call(d3.axisLeft(y).ticks(8))
+    .call(d3.axisLeft(y).ticks(compact ? 5 : 8))
     .selectAll('path, line')
     .attr('stroke', '#6b2548');
 
@@ -66,20 +69,77 @@ export function renderPCAPlot(containerId, multivarData, pcaData) {
     .attr('y', height + 42)
     .attr('text-anchor', 'middle')
     .attr('class', 'text-xs font-bold fill-[#f1e5ed] font-sans')
-    .text(`Principal Component 1 (${variancePC1}% Varians - Tingkat Pembangunan & Kepadatan) →`);
+    .text(compact
+      ? `PC1 (${variancePC1}%) →`
+      : `Principal Component 1 (${variancePC1}% Varians - Tingkat Pembangunan & Kepadatan) →`);
 
   svg.append('text')
     .attr('transform', 'rotate(-90)')
     .attr('x', -height / 2)
-    .attr('y', -45)
+    .attr('y', compact ? -30 : -45)
     .attr('text-anchor', 'middle')
     .attr('class', 'text-xs font-bold fill-[#f1e5ed] font-sans')
-    .text(`Principal Component 2 (${variancePC2}% Varians - Pendidikan / Harapan Sekolah) →`);
+    .text(compact
+      ? `PC2 (${variancePC2}%) →`
+      : `Principal Component 2 (${variancePC2}% Varians - Pendidikan / Harapan Sekolah) →`);
+
+  // Brush persegi: seret di area kosong untuk memilih beberapa provinsi sekaligus.
+  // Digambar sebelum titik agar hover/klik titik tetap berfungsi.
+  let fromBrush = false; // true saat perubahan seleksi berasal dari brush ini
+  const brush = d3.brush()
+    .extent([[0, 0], [width, height]])
+    .on('start brush end', (event) => {
+      if (!event.sourceEvent) return; // abaikan gerakan terprogram (pembersihan dari luar)
+      if (!event.selection) {
+        if (event.type === 'end') {
+          fromBrush = true;
+          state.setSelectedProvinces([]);
+          fromBrush = false;
+        }
+        return;
+      }
+      const [[x0, y0], [x1, y1]] = event.selection;
+      const picked = points
+        .filter(p => {
+          const px = x(p.pc1);
+          const py = y(p.pc2);
+          return px >= x0 && px <= x1 && py >= y0 && py <= y1;
+        })
+        .map(p => p.code);
+      fromBrush = true;
+      state.setSelectedProvinces(picked);
+      fromBrush = false;
+    });
+
+  const brushG = svg.append('g').attr('class', 'pca-brush').call(brush);
+  brushG.select('.selection')
+    .attr('fill', '#fbbf24')
+    .attr('fill-opacity', 0.12)
+    .attr('stroke', '#fbbf24')
+    .attr('stroke-dasharray', '4,3');
+
+  // Petunjuk interaksi dan penghitung seleksi
+  const hint = svg.append('text')
+    .attr('x', width).attr('y', -24)
+    .attr('text-anchor', 'end')
+    .attr('class', 'text-[10px] font-semibold fill-[#c9a0b5] font-sans')
+    .style('pointer-events', 'none');
+
+  svg.append('text')
+    .attr('x', width).attr('y', -10)
+    .attr('text-anchor', 'end')
+    .attr('class', 'text-[10px] font-bold fill-amber-400 font-sans')
+    .style('cursor', 'pointer')
+    .text('Hapus seleksi ✕')
+    .on('click', () => {
+      brushG.call(brush.move, null);
+      state.setSelectedProvinces([]);
+    });
 
   // PCA Loadings Vectors (Arrows in Die Zeit Radiant Gold)
   const loadings = pcaData.loadings;
   const vectorScale = Math.min(width, height) * 0.38;
-  const vectorGroup = svg.append('g').attr('class', 'loadings-vectors');
+  const vectorGroup = svg.append('g').attr('class', 'loadings-vectors').style('pointer-events', 'none');
 
   // Arrow marker definition
   svg.append('defs').append('marker')
@@ -123,7 +183,7 @@ export function renderPCAPlot(containerId, multivarData, pcaData) {
       .attr('x', vx + (vec[0] > 0 ? 6 : -6))
       .attr('y', vy + (vec[1] > 0 ? -6 : 12))
       .attr('text-anchor', vec[0] > 0 ? 'start' : 'end')
-      .attr('class', 'text-[10px] font-bold fill-amber-300 font-sans')
+      .attr('class', compact ? 'text-[8.5px] font-bold fill-amber-300 font-sans' : 'text-[10px] font-bold fill-amber-300 font-sans')
       .text(variableLabels[key] || key);
   });
 
@@ -181,29 +241,41 @@ export function renderPCAPlot(containerId, multivarData, pcaData) {
     hideTooltip();
   })
   .on('click', (event, d) => {
-    state.setSelectedProvince(d.code);
+    brushG.call(brush.move, null);
+    if (event.shiftKey) state.toggleProvince(d.code);
+    else state.setSelectedProvince(d.code);
   });
 
-  function updateHighlight(activeCode) {
+  // Sorotan berbasis himpunan: titik terpilih ditebalkan, sisanya diredupkan
+  function updateHighlight() {
+    const focus = state.focusSet();
+    const isOn = d => focus.size === 0 || focus.has(d.code);
+
     dots.selectAll('circle')
-      .attr('stroke', d => d.code === activeCode ? '#0284c7' : '#ffffff')
-      .attr('stroke-width', d => d.code === activeCode ? 3 : 1.5)
-      .attr('r', d => d.code === activeCode ? 10 : (d.code === '31' ? 8.5 : 6))
-      .attr('opacity', d => (!activeCode || d.code === activeCode || d.code === '31') ? 1 : 0.35);
+      .attr('stroke', d => focus.size > 0 && focus.has(d.code) ? '#0284c7' : '#ffffff')
+      .attr('stroke-width', d => focus.size > 0 && focus.has(d.code) ? 3 : 1.5)
+      .attr('r', d => focus.size > 0 && focus.has(d.code) ? 9 : (d.code === '31' ? 8.5 : 6))
+      .attr('opacity', d => (isOn(d) || d.code === '31') ? 1 : 0.35);
 
     dots.selectAll('text')
-      .attr('opacity', d => (!activeCode || d.code === activeCode || ['31', '32', '36'].includes(d.code)) ? 1 : 0.25);
+      .attr('opacity', d => (isOn(d) || ['31', '32', '36'].includes(d.code)) ? 1 : 0.25);
+
+    const n = state.selectedProvinces.size;
+    hint.text(n === 0
+      ? (compact ? 'Seret untuk memilih' : 'Seret untuk memilih · Shift+klik menambah')
+      : `${n} provinsi terpilih`);
   }
 
-  const unsubHover = state.on('province:hover', (code) => {
-    updateHighlight(code || state.selectedProvince);
-  });
+  // Bersihkan kotak brush bila seleksi berubah dari tampilan lain
+  function syncBrush(sel) {
+    if (sel.size === 0 && !fromBrush) brushG.call(brush.move, null);
+    updateHighlight();
+  }
 
-  const unsubSelect = state.on('province:select', (code) => {
-    updateHighlight(code);
-  });
+  const unsubHover = state.on('province:hover', updateHighlight);
+  const unsubSelect = state.on('selection:change', syncBrush);
 
-  updateHighlight(state.selectedProvince);
+  updateHighlight();
 
   return () => {
     unsubHover();

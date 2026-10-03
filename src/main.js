@@ -10,6 +10,8 @@ import { renderParallelCoords } from './components/multivariate/parallelCoords.j
 import { renderClusteredHeatmap } from './components/multivariate/heatmap.js';
 import { renderGeoMap } from './components/geospatial/map.js';
 import { renderNetworkGraph } from './components/network/graph.js';
+import { renderAdjacencyMatrix } from './components/network/adjacency.js';
+import { renderLinkedMultivariate } from './components/multivariate/linked.js';
 import { initScrollytelling } from './components/scrolly/story.js';
 import { renderHeroMap } from './components/hero/heroMap.js';
 
@@ -28,6 +30,7 @@ let data = {
 // Chart controller references
 let geoController = null;
 let currentActiveView = 'chord';
+let currentCleanup = null; // melepas listener state dari tampilan sebelumnya
 
 async function loadAllData() {
   const loadingIndicator = document.getElementById('loading-overlay');
@@ -74,13 +77,16 @@ async function loadAllData() {
 // Switch the sticky visualization panel with crossfade transition
 let _switchTransitionId = 0;
 
-function switchStageGraphic(viewName, skipTransition = false) {
+function switchStageGraphic(viewName, skipTransition = false, afterRender = null) {
   const container = document.getElementById('sticky-graphic-stage');
   const stageHeader = document.getElementById('stage-graphic-title');
   const stageSubtitle = document.getElementById('stage-graphic-subtitle');
   if (!container) return;
 
-  if (viewName === currentActiveView && !skipTransition) return;
+  if (viewName === currentActiveView && !skipTransition) {
+    if (afterRender) afterRender();
+    return;
+  }
 
   currentActiveView = viewName;
   const transitionId = ++_switchTransitionId;
@@ -97,23 +103,49 @@ function switchStageGraphic(viewName, skipTransition = false) {
   if (sliderContainer) {
     sliderContainer.style.display = ['chord', 'od_matrix'].includes(viewName) ? 'flex' : 'none';
   }
+  const networkControls = document.getElementById('stage-network-controls');
+  if (networkControls) {
+    networkControls.style.display = viewName === 'network' ? 'flex' : 'none';
+  }
 
   function renderNewView() {
+    // Lepas listener tampilan lama (dan hancurkan peta Leaflet) sebelum menggambar ulang
+    if (currentCleanup) {
+      try { currentCleanup(); } catch (err) { console.error('Cleanup gagal:', err); }
+      currentCleanup = null;
+    }
+    geoController = null;
     container.innerHTML = '';
     const meta = getViewMeta(viewName);
     if (stageHeader) stageHeader.textContent = meta.title;
     if (stageSubtitle) stageSubtitle.textContent = meta.subtitle;
 
+    let result = null;
     switch (viewName) {
-      case 'chord': renderChord('sticky-graphic-stage', data.flow); break;
-      case 'ranking': renderJakartaRanking('sticky-graphic-stage', data.jakarta); break;
-      case 'od_matrix': renderODMatrix('sticky-graphic-stage', data.flow); break;
-      case 'pca': renderPCAPlot('sticky-graphic-stage', data.multivariate, data.pca); break;
-      case 'parallel': renderParallelCoords('sticky-graphic-stage', data.multivariate); break;
-      case 'heatmap': renderClusteredHeatmap('sticky-graphic-stage', data.multivariate, data.pca); break;
-      case 'map': geoController = renderGeoMap('sticky-graphic-stage', data.geoBoundary, data.geoData, data.commuter); break;
-      case 'network': renderNetworkGraph('sticky-graphic-stage', data.network); break;
+      case 'chord': result = renderChord('sticky-graphic-stage', data.flow); break;
+      case 'ranking': result = renderJakartaRanking('sticky-graphic-stage', data.jakarta); break;
+      case 'od_matrix': result = renderODMatrix('sticky-graphic-stage', data.flow); break;
+      case 'linked': result = renderLinkedMultivariate('sticky-graphic-stage', data.multivariate, data.pca); break;
+      case 'pca': result = renderPCAPlot('sticky-graphic-stage', data.multivariate, data.pca); break;
+      case 'parallel': result = renderParallelCoords('sticky-graphic-stage', data.multivariate); break;
+      case 'heatmap': result = renderClusteredHeatmap('sticky-graphic-stage', data.multivariate, data.pca); break;
+      case 'map':
+        result = renderGeoMap('sticky-graphic-stage', data.geoBoundary, data.geoData, data.commuter);
+        geoController = result;
+        break;
+      case 'network': result = renderNetworkGraph('sticky-graphic-stage', data.network); break;
+      // result = state.networkMode === 'matrix'
+      //   ? renderAdjacencyMatrix('sticky-graphic-stage', data.network)
+      //   : renderNetworkGraph('sticky-graphic-stage', data.network);
+      // updateNetworkControls();
+      // if (state.networkMode === 'matrix' && stageSubtitle) {
+      //   stageHeader.textContent = 'Matriks Adjacency Jaringan Migrasi';
+      //   stageSubtitle.textContent = 'Baris = asal, kolom = tujuan; urut menurut weighted strength, hanya edge di atas ambang';
+      // }
+      // break;
     }
+    currentCleanup = typeof result === 'function' ? result : (result && result.destroy) || null;
+    if (afterRender) afterRender();
   }
 
   if (skipTransition || !container.children.length) {
@@ -154,6 +186,10 @@ function getViewMeta(viewName) {
       title: 'Matriks Asal-Tujuan',
       subtitle: 'Heatmap seluruh pasangan provinsi',
     },
+    linked: {
+      title: 'PCA + Koordinat Paralel Terhubung (Brushing & Linking)',
+      subtitle: 'Seret kotak di PCA untuk memilih',
+    },
     pca: {
       title: 'PCA Biplot (PC1 vs PC2) 8 Indikator Pembangunan',
       subtitle: 'DKI Jakarta menjadi pencilan ekstrem di PC1 (+6,16): tertinggi pada beberapa indikator',
@@ -168,11 +204,11 @@ function getViewMeta(viewName) {
     },
     map: {
       title: 'Peta Geospasial Kab/Kota & Garis Komuter 2019',
-      subtitle: 'Choropleth kab/kota dengan arus komuter antar-kab/kota Jabodetabek (2019, terpisah dari migrasi 2020)',
+      subtitle: 'Arus komuter antar-kab/kota Jabodetabek 2019',
     },
     network: {
       title: 'Graf Jaringan Force-Directed & Hub Migrasi',
-      subtitle: 'Ukuran node mencerminkan weighted strength (total arus masuk + keluar); posisi node hanya hasil tata letak graf',
+      subtitle: 'Ukuran node mencerminkan total arus masuk + keluar',
     },
   };
   return meta[viewName] || { title: '', subtitle: '' };
@@ -234,23 +270,75 @@ function updateInsightBadge(stepIndex) {
 
 function onStepEnter(stepIndex) {
   const targetView = stepViewMap[stepIndex] || 'chord';
-  switchStageGraphic(targetView);
+
+  // Aksi peta dijalankan setelah peta selesai dibuat (render ditunda saat crossfade)
+  const afterRender = targetView === 'map'
+    ? () => {
+      if (!geoController) return;
+      if (stepIndex === 6) {
+        geoController.flyToJava();
+        geoController.setMetric('poverty');
+        geoController.setSymbols(false); // fokus ke choropleth kuantil
+      } else if (stepIndex === 7) {
+        geoController.flyToJabodetabek();
+        geoController.setMetric('poverty');
+        geoController.setSymbols(true); // tambah simbol proporsional penduduk
+      }
+    }
+    : null;
+
+  switchStageGraphic(targetView, false, afterRender);
   updateProgressDots(stepIndex);
   updateInsightBadge(stepIndex);
+}
 
-  if (targetView === 'map' && geoController) {
-    if (stepIndex === 6) {
-      geoController.flyToJava();
-      geoController.setMetric('poverty');
-    } else if (stepIndex === 7) {
-      geoController.flyToJabodetabek();
-      geoController.setMetric('population');
-    }
+// Sinkronkan tombol mode dan hitungan edge pada kontrol jaringan
+function updateNetworkControls() {
+  document.querySelectorAll('.net-mode-btn').forEach(btn => {
+    const active = btn.dataset.mode === state.networkMode;
+    btn.className = 'net-mode-btn px-2 py-0.5 rounded-md font-bold ' + (active
+      ? 'bg-amber-400 text-slate-950'
+      : 'bg-[#280718] border border-[#5a1b38] text-[#d8b4c8] hover:text-white');
+    btn.setAttribute('aria-pressed', String(active));
+  });
+  const countEl = document.getElementById('network-edge-count');
+  if (countEl && data.network) {
+    const n = data.network.links.filter(l => l.value >= state.networkThreshold).length;
+    countEl.textContent = `${n.toLocaleString('id-ID')} edge · ${data.network.nodes.length} node`;
   }
+}
+
+// Isi dropdown asal/tujuan dari daftar provinsi pada data aliran
+function populateFlowFilters() {
+  if (!data.flow) return;
+  const nodes = [...data.flow.nodes].sort((a, b) => a.name.localeCompare(b.name, 'id'));
+  [['flow-origin-select', 'origin'], ['flow-dest-select', 'dest']].forEach(([id, kind]) => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Semua</option>' +
+      nodes.map(n => `<option value="${n.id}">${n.name}</option>`).join('');
+    sel.addEventListener('change', (e) => {
+      if (kind === 'origin') state.setFlowOrigin(e.target.value);
+      else state.setFlowDest(e.target.value);
+      // Chord dibangun dari matriks yang sudah difilter, jadi digambar ulang;
+      // matriks OD cukup meredupkan sel lewat event flow:filter.
+      if (currentActiveView === 'chord') switchStageGraphic('chord', true);
+    });
+  });
 }
 
 // UI controls: tabs, sliders, buttons
 function setupUIControls() {
+  populateFlowFilters();
+
+  document.querySelectorAll('.net-mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.setNetworkMode(btn.dataset.mode);
+      updateNetworkControls();
+      if (currentActiveView === 'network') switchStageGraphic('network', true);
+    });
+  });
+
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const view = e.currentTarget.dataset.view;
@@ -276,6 +364,7 @@ function setupUIControls() {
       const val = parseInt(e.target.value, 10);
       netValDisplay.textContent = val.toLocaleString('id-ID') + ' jiwa';
       state.setNetworkThreshold(val);
+      updateNetworkControls();
       if (currentActiveView === 'network') switchStageGraphic('network', true);
     });
   }
@@ -283,8 +372,15 @@ function setupUIControls() {
   const resetFocusBtn = document.getElementById('btn-reset-focus');
   if (resetFocusBtn) {
     resetFocusBtn.addEventListener('click', () => {
+      state.setFlowOrigin(null);
+      state.setFlowDest(null);
+      ['flow-origin-select', 'flow-dest-select'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
       state.setSelectedProvince('31');
       state.setHoveredProvince(null);
+      if (currentActiveView === 'chord') switchStageGraphic('chord', true);
     });
   }
 

@@ -1,10 +1,14 @@
 class AppState {
   constructor() {
-    this.selectedProvince = '31'; // Default focus: DKI Jakarta
+    // Seleksi jamak (brushing & linking). Default: fokus DKI Jakarta.
+    this.selectedProvinces = new Set(['31']);
     this.hoveredProvince = null;
     this.selectedCluster = null;
     this.flowThreshold = 2500;
     this.networkThreshold = 5000;
+    this.networkMode = 'graph'; // 'graph' | 'matrix'
+    this.flowOrigin = null; // null = semua provinsi asal
+    this.flowDest = null; // null = semua provinsi tujuan
     this.activeStep = 0;
     this.listeners = new Map();
   }
@@ -41,9 +45,49 @@ class AppState {
     this.emit('province:hover', code);
   }
 
+  // Kompatibilitas: kode provinsi pertama dalam seleksi (atau null)
+  get selectedProvince() {
+    const first = this.selectedProvinces.values().next();
+    return first.done ? null : first.value;
+  }
+
+  // Pilih satu provinsi (null mengosongkan seleksi)
   setSelectedProvince(code) {
-    this.selectedProvince = code;
-    this.emit('province:select', code);
+    this.setSelectedProvinces(code ? [code] : []);
+  }
+
+  // Ganti seluruh seleksi (dipakai oleh brush dan klik)
+  setSelectedProvinces(codes) {
+    this.selectedProvinces = new Set(codes);
+    this.emit('selection:change', this.selectedProvinces);
+  }
+
+  // Tambah/hapus satu provinsi dari seleksi (Shift+klik)
+  toggleProvince(code) {
+    const next = new Set(this.selectedProvinces);
+    if (next.has(code)) next.delete(code);
+    else next.add(code);
+    this.setSelectedProvinces(next);
+  }
+
+  // Himpunan fokus efektif: sorotan hover menimpa seleksi sementara
+  focusSet() {
+    return this.hoveredProvince ? new Set([this.hoveredProvince]) : this.selectedProvinces;
+  }
+
+  setFlowOrigin(code) {
+    this.flowOrigin = code || null;
+    this.emit('flow:filter', { origin: this.flowOrigin, dest: this.flowDest });
+  }
+
+  setFlowDest(code) {
+    this.flowDest = code || null;
+    this.emit('flow:filter', { origin: this.flowOrigin, dest: this.flowDest });
+  }
+
+  setNetworkMode(mode) {
+    this.networkMode = mode;
+    this.emit('network:mode', mode);
   }
 
   setCluster(clusterId) {
