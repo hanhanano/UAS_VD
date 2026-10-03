@@ -1,0 +1,11 @@
+RAW Excel    : D:\Kuliah\Sem 6\VisualData\UAS_newfresh\template_data.xlsx
+RAW boundary : D:\Kuliah\Sem 6\VisualData\UAS_newfresh\Adm_Kabupaten.json
+T2: Sorong Selatan 9110 -> 9106
+T2: Sorong 9109 -> 9107
+T2: Tambrauw 9112 -> 9109
+T2: Maybrat 9111 -> 9110
+T2: Manokwari Selatan 9106 -> 9111
+T2: Pegunungan Arfak 9107 -> 9112
+T2: Luwu Timur 7324 -> 7325
+JOIN: 514 kode kab/kota cocok 1:1.
+FLOW: 34 node, 1122 off-diagonal records, 1061 positive-flow edges.
