@@ -1,7 +1,7 @@
 # Jakarta Dilepas, Bodetabek Dihuni
 
-**UAS Visualisasi Data — Semester 6**
-Oleh Raihan Taufiqurrahman Zaki 3SD1
+**UAS Visualisasi Data**
+Raihan Taufiqurrahman Zaki 3SD1
 
 ---
 
