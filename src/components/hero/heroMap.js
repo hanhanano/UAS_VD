@@ -92,7 +92,7 @@ export function renderHeroMap(containerId) {
   const pathGenerator = d3.geoPath().projection(projection);
 
   // Load Java-Only GeoJSON
-  d3.json('/data/hero_java_only.json').then(geoData => {
+  d3.json(`${import.meta.env.BASE_URL}data/hero_java_only.json`).then(geoData => {
     projection.fitExtent(
       [[8, 8], [width - 8, height - 40]],
       geoData

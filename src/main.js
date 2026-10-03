@@ -42,14 +42,14 @@ async function loadAllData() {
       network,
       geoBoundary
     ] = await Promise.all([
-      fetch('/data/flow.json').then(r => r.json()),
-      fetch('/data/jakarta.json').then(r => r.json()),
-      fetch('/data/multivariate.json').then(r => r.json()),
-      fetch('/data/pca.json').then(r => r.json()),
-      fetch('/data/geo_data.json').then(r => r.json()),
-      fetch('/data/commuter.json').then(r => r.json()),
-      fetch('/data/network.json').then(r => r.json()),
-      fetch('/data/kabkot.geojson').then(r => r.json())
+      fetch(`${import.meta.env.BASE_URL}data/flow.json`).then(r => r.json()),
+      fetch(`${import.meta.env.BASE_URL}data/jakarta.json`).then(r => r.json()),
+      fetch(`${import.meta.env.BASE_URL}data/multivariate.json`).then(r => r.json()),
+      fetch(`${import.meta.env.BASE_URL}data/pca.json`).then(r => r.json()),
+      fetch(`${import.meta.env.BASE_URL}data/geo_data.json`).then(r => r.json()),
+      fetch(`${import.meta.env.BASE_URL}data/commuter.json`).then(r => r.json()),
+      fetch(`${import.meta.env.BASE_URL}data/network.json`).then(r => r.json()),
+      fetch(`${import.meta.env.BASE_URL}data/kabkot.geojson`).then(r => r.json())
     ]);
 
     data = { flow, jakarta, multivariate, pca, geoData, commuter, network, geoBoundary };
