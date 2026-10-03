@@ -29,8 +29,8 @@ export function renderLinkedMultivariate(containerId, multivarData, pcaData) {
   };
 
   wrapper.append(
-    mkPane('linked-pca', sideBySide ? '5 1 0' : '1 1 0', 'PCA'),
-    mkPane('linked-parallel', sideBySide ? '6 1 0' : '1 1 0', 'Koordinat paralel')
+    mkPane('linked-pca', sideBySide ? '3 1 0' : '1 1 0', 'PCA'),
+    mkPane('linked-parallel', sideBySide ? '2 1 0' : '1 1 0', 'Koordinat paralel')
   );
   container.appendChild(wrapper);
 

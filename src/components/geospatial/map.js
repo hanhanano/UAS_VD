@@ -370,8 +370,17 @@ export function renderGeoMap(containerId, geoBoundary, geoData, commuterData) {
             geojsonLayer.resetStyle(e.target);
             hideTooltip();
           },
-          click: () => {
-            if (data) state.setSelectedProvince(String(data.province_code));
+          click: (e) => {
+            if (data) {
+              state.setSelectedProvince(String(data.province_code));
+
+              // Zoom ke kab/kota yang diklik
+              map.flyToBounds(e.target.getBounds(), {
+                padding: [40, 40],
+                maxZoom: 11,
+                duration: 0.8
+              });
+            }
           }
         });
       }

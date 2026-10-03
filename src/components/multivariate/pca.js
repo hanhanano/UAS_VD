@@ -70,7 +70,7 @@ export function renderPCAPlot(containerId, multivarData, pcaData, opts = {}) {
     .attr('text-anchor', 'middle')
     .attr('class', 'text-xs font-bold fill-[#f1e5ed] font-sans')
     .text(compact
-      ? `PC1 (${variancePC1}%) →`
+      ? `PC1 Tingkat Pembangunan & Kepadatan (${variancePC1}%) →`
       : `Principal Component 1 (${variancePC1}% Varians - Tingkat Pembangunan & Kepadatan) →`);
 
   svg.append('text')
@@ -80,7 +80,7 @@ export function renderPCAPlot(containerId, multivarData, pcaData, opts = {}) {
     .attr('text-anchor', 'middle')
     .attr('class', 'text-xs font-bold fill-[#f1e5ed] font-sans')
     .text(compact
-      ? `PC2 (${variancePC2}%) →`
+      ? `PC2 Pendidikan / Harapan Sekolah (${variancePC2}%) →`
       : `Principal Component 2 (${variancePC2}% Varians - Pendidikan / Harapan Sekolah) →`);
 
   // Brush persegi: seret di area kosong untuk memilih beberapa provinsi sekaligus.
