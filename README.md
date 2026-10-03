@@ -71,16 +71,17 @@ Seluruh data utama dalam proyek ini bersumber dari **Badan Pusat Statistik (BPS)
 
 | Kode | Sumber | Tahun Data | URL | Tanggal Akses |
 |---|---|---:|---|---|
-| SRC001 | Statistik Migrasi Indonesia Hasil Long Form SP 2020 | 2020 | [URL BPS] | [tanggal] |
-| SRC002 | Indeks Pembangunan Manusia 2020 | 2020 | [URL BPS] | [tanggal] |
-| SRC003 | Statistik Demografi Indonesia Hasil SP 2020 | 2020 | [URL BPS] | [tanggal] |
-| SRC004 | Persentase Penduduk Miskin (P0) menurut Kab/Kota | 2020 | [URL BPS] | [tanggal] |
-| SRC005 | IPM Metode Baru, tabel nasional | 2020 | [URL BPS] | [tanggal] |
-| SRC006–007 | IPM Papua & Papua Barat | 2020 | [URL BPS] | [tanggal] |
-| SRC008 | PDRB Kabupaten/Kota di Indonesia | 2020–2024 | [URL BPS] | [tanggal] |
-| SRC009 | Tingkat Pengangguran Terbuka menurut Kab/Kota | 2020 | [URL BPS] | [tanggal] |
-| SRC010 | Jumlah Penduduk menurut Kab/Kota dan Kelompok Umur | 2020 | [URL BPS] | [tanggal] |
-| SRC011 | Statistik Komuter Jabodetabek | 2019 | [URL BPS] | [tanggal] |
+| SRC001 | Statistik Migrasi Indonesia Hasil Long Form SP 2020 | 2020 | https://www.bps.go.id/id/publication/2023/07/20/97c956dd7ff3ece924911115/statistik-migrasi-indonesia-hasil-long-form-sensus-penduduk-2020.html | 2 Oktober 2026 |
+| SRC002 | Indeks Pembangunan Manusia 2020 | 2020 | https://www.bps.go.id/id/publication/2021/04/30/8e777ce2d7570ced44197a37/indeks-pembangunan-manusia-2020.html | 2 Oktober 2026 |
+| SRC003 | Statistik Demografi Indonesia Hasil SP 2020 | 2020 | https://www.bps.go.id/id/publication/2025/01/31/29a40174e02f20a7a31b5bc3/statistik-demografi-indonesia--hasil-sensus-penduduk-2020-.html | 3 Oktober 2026 |
+| SRC004 | Persentase Penduduk Miskin (P0) menurut Kab/Kota | 2020 | https://www.bps.go.id/id/query-builder | 3 Oktober 2026 |
+| SRC005 | IPM Metode Baru, tabel nasional | 2020 | https://www.bps.go.id/id/query-builder | 3 Oktober 2026 |
+| SRC006 | IPM Papua | 2020 | https://papua.bps.go.id/id/query-builder | 3 Oktober 2026 |
+| SRC007 | IPM Papua Barat | 2020 | https://papuabarat.bps.go.id/id/query-builder | 3 Oktober 2026 |
+| SRC008 | PDRB Kabupaten/Kota di Indonesia 2020–2024 | 2020–2024 | https://www.bps.go.id/id/publication/2025/06/10/ca543e942579ced46afd603b/produk-domestik-regional-bruto-kabupaten-kota-di-indonesia-2020-2024.html | 3 Oktober 2026 |
+| SRC009 | Tingkat Pengangguran Terbuka menurut Kab/Kota | 2020 | https://www.bps.go.id/id/query-builder | 3 Oktober 2026 |
+| SRC010 | Jumlah Penduduk menurut Kab/Kota dan Kelompok Umur | 2020 | https://www.bps.go.id/id/query-builder | 3 Oktober 2026 |
+| SRC011 | Statistik Komuter Jabodetabek | 2019 | https://www.bps.go.id/id/publication/2019/12/04/eab87d14d99459f4016bb057/statistik-komuter-jabodetabek-2019.html | 3 Oktober 2026 |
 
 ## Cara Menjalankan
 
