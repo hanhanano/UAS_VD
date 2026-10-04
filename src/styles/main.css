@@ -1,0 +1,565 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* Lenis smooth scroll base styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+  /* Lenis handles smooth scroll, disable native */
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Fallback for non-JS */
+  }
+
+  body {
+    background-color: #4f0f31;
+    color: #f1e5ed;
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    font-weight: 500;
+    overflow-x: hidden;
+  }
+
+  .font-script {
+    font-family: 'Yellowtail', cursive;
+  }
+
+  .font-main {
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  }
+
+  .font-editorial {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SCROLL REVEAL ANIMATION SYSTEM
+   Elements start invisible & translated, then animate in when visible.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Base reveal state: hidden */
+[data-reveal] {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Visible state */
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}
+
+/* Direction variants ,  initial transforms */
+[data-reveal="up"] {
+  transform: translateY(40px);
+}
+
+[data-reveal="down"] {
+  transform: translateY(-40px);
+}
+
+[data-reveal="left"] {
+  transform: translateX(50px);
+}
+
+[data-reveal="right"] {
+  transform: translateX(-50px);
+}
+
+[data-reveal="fade"] {
+  transform: none;
+}
+
+[data-reveal="scale"] {
+  transform: scale(0.92);
+}
+
+[data-reveal="scale-up"] {
+  transform: scale(0.92) translateY(30px);
+}
+
+/* Stagger delay utility classes (applied to children) */
+[data-reveal-delay="1"] {
+  transition-delay: 0.08s;
+}
+
+[data-reveal-delay="2"] {
+  transition-delay: 0.16s;
+}
+
+[data-reveal-delay="3"] {
+  transition-delay: 0.24s;
+}
+
+[data-reveal-delay="4"] {
+  transition-delay: 0.32s;
+}
+
+[data-reveal-delay="5"] {
+  transition-delay: 0.40s;
+}
+
+[data-reveal-delay="6"] {
+  transition-delay: 0.48s;
+}
+
+[data-reveal-delay="7"] {
+  transition-delay: 0.56s;
+}
+
+[data-reveal-delay="8"] {
+  transition-delay: 0.64s;
+}
+
+/* Group stagger: auto-delay children */
+[data-reveal-stagger]>[data-reveal] {
+  transition-delay: calc(var(--reveal-i, 0) * 0.1s);
+}
+
+/* Longer/shorter duration variants */
+[data-reveal-duration="fast"] {
+  transition-duration: 0.5s;
+}
+
+[data-reveal-duration="slow"] {
+  transition-duration: 1.2s;
+}
+
+/* ── Smooth page scroll anchor offset ────────────────────────────────────── */
+:target {
+  scroll-margin-top: 5rem;
+}
+
+/* ── Hero entrance keyframe animations ───────────────────────────────────── */
+@keyframes hero-title-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hero-subtitle-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  60% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-map-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes hero-cta-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
+  }
+}
+
+@keyframes float-gentle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.hero-animate-title {
+  animation: hero-title-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.hero-animate-subtitle {
+  animation: hero-subtitle-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+}
+
+.hero-animate-map {
+  animation: hero-map-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.hero-animate-cta {
+  animation: hero-subtitle-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
+}
+
+.hero-cta-glow:hover {
+  animation: hero-cta-pulse 1.6s ease-in-out infinite;
+}
+
+.float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+/* ── Smooth navbar shrink on scroll ──────────────────────────────────────── */
+header.is-scrolled {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Die Zeit Atmospheric Dark Aubergine Hero Styling ────────────────────────── */
+.hero-shell {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  isolation: isolate;
+  background:
+    radial-gradient(65% 55% at 20% 25%, rgba(245, 158, 11, 0.09) 0%, rgba(245, 158, 11, 0) 70%),
+    radial-gradient(60% 60% at 85% 75%, rgba(225, 29, 72, 0.12) 0%, rgba(225, 29, 72, 0) 70%),
+    #521430;
+}
+
+.hero-guides {
+  position: absolute;
+  inset: 0;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hero-guides i {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 15%, rgba(255, 255, 255, 0.05) 85%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* ── Subtle Topographic Contour Background Layer ───────────────────────── */
+.hero-topo-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.15;
+}
+
+.hero-topo-layer svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-ghost {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(4rem, 16vw, 15rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.025);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Editorial Dark Plum Cards */
+.glass-panel {
+  background: rgba(62, 16, 38, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(110, 36, 72, 0.6);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+}
+
+.glass-panel-subtle {
+  background: rgba(45, 11, 27, 0.7);
+  border: 1px solid rgba(88, 28, 58, 0.5);
+}
+
+/* Scrollytelling layout */
+.scrolly-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .scrolly-container {
+    flex-direction: row;
+  }
+
+  .scrolly-graphic {
+    position: sticky;
+    top: 5rem;
+    height: calc(100vh - 6.5rem);
+    width: 60%;
+  }
+
+  .scrolly-text {
+    width: 40%;
+    z-index: 20;
+  }
+}
+
+/* ── Progress Dots Navigation ─────────────────────────────────────────── */
+.scrolly-progress-dots {
+  position: fixed;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+  gap: 0.65rem;
+  z-index: 40;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.scrolly-progress-dots.is-visible {
+  opacity: 1;
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(200, 160, 180, 0.25);
+  border: 1.5px solid rgba(200, 160, 180, 0.3);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.progress-dot:hover {
+  background: rgba(251, 191, 36, 0.4);
+  border-color: rgba(251, 191, 36, 0.6);
+  transform: scale(1.3);
+}
+
+.progress-dot.is-active {
+  background: #fbbf24;
+  border-color: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+  transform: scale(1.2);
+}
+
+/* Tooltip on hover */
+.progress-dot:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(42, 9, 25, 0.95);
+  border: 1px solid #5a1b38;
+  color: #f1e5ed;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Key Insight Badge ────────────────────────────────────────────────── */
+.stage-insight-badge {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(42, 9, 25, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(110, 36, 72, 0.5);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  z-index: 10;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.stage-insight-badge.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Stage Visualization Crossfade Transitions ──────────────────────────── */
+#sticky-graphic-stage {
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform, filter;
+}
+
+#sticky-graphic-stage.stage-fade-out {
+  opacity: 0;
+  transform: scale(0.97);
+  filter: blur(3px);
+}
+
+#sticky-graphic-stage.stage-fade-in {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+/* ── Semi-fullscreen map mode ─────────────────────────────────────────── */
+.map-wrapper-fullscreen {
+  position: fixed !important;
+  inset: 0;
+  z-index: 9999;
+  padding: 0.75rem;
+  background: #240816;
+  min-height: 100dvh !important;
+}
+
+@media (max-width: 768px) {
+  .geo-legend {
+    max-width: 170px !important;
+    font-size: 10.5px !important;
+  }
+}
+
+/* Header/subtitle smooth text transition */
+#stage-graphic-title,
+#stage-graphic-subtitle {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+#stage-graphic-title.stage-header-transitioning,
+#stage-graphic-subtitle.stage-header-transitioning {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.step {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.15;
+  transform: translateY(20px);
+  filter: blur(1px);
+}
+
+.step.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Floating Clean Dark Tooltip */
+#d3-tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  background: rgba(42, 9, 25, 0.96);
+  backdrop-filter: blur(12px);
+  border: 1px solid #71274d;
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  border-radius: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.85rem;
+  font-family: 'Montserrat', sans-serif;
+  color: #f8fafc;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  max-width: 320px;
+}
+
+/* D3 styling enhancements */
+.chord-path {
+  transition: opacity 0.25s ease;
+}
+
+.chord-path:hover {
+  opacity: 0.95 !important;
+}
+
+.node-circle {
+  transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+.node-circle:hover {
+  transform: scale(1.15);
+}
+
+/* Leaflet dark theme */
+.leaflet-container {
+  background-color: #240816 !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2b0919;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6e2448;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9d3969;
+}
