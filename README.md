@@ -8,8 +8,6 @@ Raihan Taufiqurrahman Zaki - 222313332 - 3SD1
 
 ## Deskripsi
 
-## Deskripsi
-
 **Jakarta Dilepas, Bodetabek Dihuni** adalah website data storytelling interaktif
 yang menganalisis pola migrasi risen penduduk Indonesia berdasarkan data BPS, dengan fokus pada fenomena perpindahan penduduk keluar DKI Jakarta dan keterkaitannya dengan wilayah penyangga Bodetabek.
 
