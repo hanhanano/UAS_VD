@@ -1,0 +1,72 @@
+{
+  "variables": {
+    "flow": {
+      "source": "FLOW_OD",
+      "expected_nodes": 34,
+      "visuals": [
+        "chord diagram",
+        "OD matrix"
+      ],
+      "filter": "threshold on migration volume",
+      "diagonal": "excluded from visualization"
+    },
+    "jakarta": {
+      "source": "FLOW_OD",
+      "visuals": [
+        "outgoing bar ranking",
+        "incoming bar ranking"
+      ],
+      "focus_code": "31"
+    },
+    "multivariate": {
+      "source": "MULTIVARIAT_PROVINSI",
+      "observations": 34,
+      "variables": [
+        "ipm",
+        "uhh",
+        "hls",
+        "rls",
+        "pengeluaran_per_kapita",
+        "persentase_miskin",
+        "tpt",
+        "kepadatan_penduduk"
+      ],
+      "pca": "SVD on z-score; density log10",
+      "other_methods": [
+        "parallel coordinates",
+        "hierarchical Ward clustered heatmap"
+      ],
+      "linking_key": "kode_provinsi"
+    },
+    "geospatial": {
+      "source": "GEO_KABKOTA + Adm_Kabupaten boundary",
+      "units": 514,
+      "choropleth": "poverty percentage",
+      "symbols": "population",
+      "interaction": [
+        "tooltip",
+        "zoom/pan",
+        "layer control"
+      ]
+    },
+    "commuter": {
+      "source": "KOMUTER_JABODETABEK",
+      "year": 2019,
+      "warning": "NOT migration 2020"
+    },
+    "network": {
+      "source": "FLOW_OD",
+      "nodes": 34,
+      "edge_rule": "positive migration only",
+      "metrics": [
+        "weighted_strength",
+        "betweenness"
+      ],
+      "interaction": [
+        "edge threshold",
+        "neighbor highlight",
+        "draggable nodes"
+      ]
+    }
+  }
+}
