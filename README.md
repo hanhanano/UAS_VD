@@ -48,7 +48,7 @@ Data yang digunakan dalam proyek ini tidak tersedia dalam format siap pakai. Sel
 - **Query Builder BPS**: fitur tabel dinamis di situs [bps.go.id](https://www.bps.go.id) untuk mengunduh data statistik per indikator, provinsi, dan tahun.
 - **Dokumen Publikasi BPS**: file PDF/publikasi resmi seperti *Statistik Migrasi Indonesia*, *PDRB Kabupaten/Kota*, dan *Statistik Komuter Jabodetabek*.
 
-Dari berbagai sumber tersebut, data diekstrak secara manual ke dalam satu file Excel tunggal yaitu [`template_data.xlsx`](public/data/template_data.xlsx). File ini berfungsi sebagai *single source of truth* yang kemudian diolah dan dipecah menjadi dataset-dataset CSV/JSON final yang digunakan oleh setiap visualisasi.
+Dari berbagai sumber tersebut, data diekstrak secara manual ke dalam satu file Excel tunggal yaitu [`template_data.xlsx`](literatur_dan_data/data_mentah/template_data.xlsx). File ini berfungsi sebagai *single source of truth* yang kemudian diolah dan dipecah menjadi dataset-dataset CSV/JSON final yang digunakan oleh setiap visualisasi.
 
 ## Pengolahan Data
 
@@ -111,7 +111,12 @@ akhir selesai.
 ## Struktur Proyek
 
 ```
+├── 222313332_UASVisdat.docx    # Makalah ilmiah (format IEEE)
 ├── index.html                  # Halaman utama
+├── literatur_dan_data/         # Literatur referensi dan data mentah
+│   ├── data_mentah/            # Raw data BPS, template_data.xlsx, preprocess.py
+│   └── literatur/              # Dokumen literatur & paper acuan
+├── makalah/                    # Template naskah IEEE
 ├── src/
 │   ├── main.js                 # Kontrol awal
 │   ├── state.js                # Global state
@@ -136,7 +141,7 @@ akhir selesai.
 │   │       └── story.js        # Scrollama initialization
 │   └── utils/
 │       └── tooltip.js          # D3 tooltip helper
-├── public/data/                # Dataset
+├── public/data/                # Dataset final (JSON & GeoJSON)
 ├── vite.config.js
 └── package.json
 ```

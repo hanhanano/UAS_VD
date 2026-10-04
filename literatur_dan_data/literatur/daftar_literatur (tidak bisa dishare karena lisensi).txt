@@ -1,28 +1,3 @@
-*.log
-.DS_Store
-.env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-Homestead.json
-Homestead.yaml
-Thumbs.db
-222313332_UASVisdat.docx
 [10]_bostock-tvcg11.pdf
 [11]_force-directed.pdf
 [12]_A faster algorithm for betweenness centrality.pdf
@@ -47,3 +22,7 @@ Thumbs.db
 [7]_Circos_An_information_aesthetic_for_comparative_ge.pdf
 [8]_AbelandSander_QuantifyingGlobalInternationalMigrationFlows_AcceptedVersion.pdf
 [9]_Visualisation of Origins  Destinations and Flows with OD Maps.pdf
+
+Catatan: 
+1. Tidak dapat diupload ke GitHub karena lisensi
+2. Seluruh link file terlampir di makalah
